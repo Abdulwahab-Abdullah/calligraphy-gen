@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نقش الاسم — مولّد الخط العربي</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#07060A">
+<meta name="description" content="نقش الاسم — مولّد الخط العربي: اكتب اسمك وشاهد الحروف تتشكّل، ثم احفظه بمقاس وسائل التواصل.">
+<meta property="og:title" content="نقش الاسم — مولّد الخط العربي">
+<meta property="og:description" content="اكتب اسمك وشاهد الحروف تتشكّل بخطوط عربية أصيلة.">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700&family=Reem+Kufi:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Lateef:wght@400;700&family=Rakkas&family=El+Messiri:wght@400;700&family=Lalezar&family=Jomhuria&family=Gulzar&family=Mirza:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07060A;--panel:#0F0C10;
+  --border:rgba(200,165,75,.14);--border2:rgba(200,165,75,.3);
+  --accent:#C8A84B;--text:#EAE0CC;--sub:#7A7060;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100dvh;max-width:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Cairo',sans-serif;position:relative}
+#bgC{position:fixed;inset:0;pointer-events:none;z-index:0;width:100%;height:100%}
+.page{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:24px 16px 56px}
+
+/* ── Header ── */
+.hdr{text-align:center;padding-bottom:24px}
+.hdr-tools{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:4px}
+.hdr-tools svg{opacity:.4}
+.hdr-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:6px}
+.hdr-line{flex:1;max-width:140px;height:1px;background:linear-gradient(to left,transparent,var(--accent),transparent)}
+.hdr h1{font-family:'Amiri',serif;font-size:clamp(28px,4vw,48px);font-weight:700;color:var(--accent);line-height:1}
+.hdr h1 small{display:block;font-family:'Cairo',sans-serif;font-size:clamp(10px,.9vw,13px);font-weight:400;color:var(--sub);letter-spacing:2px;margin-top:4px}
+.hdr-sub{font-size:12px;color:var(--sub);letter-spacing:.4px}
+
+/* ── Grid ── */
+.main-grid{display:flex;flex-direction:column;gap:16px}
+@media(min-width:760px){.main-grid{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}}
+@media(min-width:900px){.main-grid{grid-template-columns:360px 1fr;gap:20px}}
+@media(min-width:1200px){.main-grid{grid-template-columns:400px 1fr;gap:28px}}
+@media(min-width:1440px){.main-grid{grid-template-columns:440px 1fr}}
+
+/* ── Controls ── */
+.controls{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:18px;min-width:0}
+@media(min-width:760px){.controls{position:sticky;top:20px}}
+.ctrl-label{font-size:10px;font-weight:700;color:var(--sub);letter-spacing:1.4px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.ctrl-label::before{content:'';display:block;width:3px;height:10px;background:var(--accent);border-radius:2px}
+
+/* name */
+.name-wrap{background:rgba(200,165,75,.05);border:1px solid var(--border2);border-radius:13px;overflow:hidden;transition:border-color .2s,box-shadow .2s;position:relative}
+.name-wrap:focus-within{border-color:rgba(200,165,75,.6);box-shadow:0 0 0 3px rgba(200,165,75,.06)}
+#nameInput{width:100%;padding:13px 42px 13px 14px;background:transparent;border:none;outline:none;font-family:'Amiri',serif;font-size:clamp(22px,3.5vw,30px);font-weight:700;color:var(--text);text-align:right;direction:rtl;caret-color:var(--accent)}
+#nameInput::placeholder{color:rgba(200,165,75,.22);font-style:italic}
+.name-icon{position:absolute;top:50%;right:13px;transform:translateY(-50%);font-size:15px;color:var(--sub);opacity:.45;pointer-events:none}
+
+/* format tiles */
+.fmt-grid{display:flex;gap:8px}
+.fmt-tile{flex:1;background:rgba(18,14,22,.85);border:1.5px solid rgba(200,165,75,.1);border-radius:12px;padding:10px 6px 8px;cursor:pointer;transition:border-color .18s,background .18s,transform .12s,box-shadow .18s;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center}
+.fmt-tile:hover{border-color:rgba(200,165,75,.38);background:rgba(200,165,75,.07)}
+.fmt-tile:active{transform:scale(.97)}
+.fmt-tile.active{border-color:var(--accent);background:rgba(200,165,75,.1);box-shadow:0 0 16px rgba(200,165,75,.1),inset 0 1px 0 rgba(200,165,75,.15)}
+.fmt-shape{border:1.5px solid rgba(200,165,75,.4);background:rgba(200,165,75,.07);border-radius:2px}
+.fmt-name{font-size:11px;font-weight:700;color:var(--text)}
+.fmt-sub{font-size:9px;color:var(--sub);font-family:monospace}
+
+/* font tiles */
+.font-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(min-width:640px) and (max-width:899px){.font-grid{grid-template-columns:repeat(3,1fr)}}
+.font-tile{background:rgba(18,14,22,.85);border:1.5px solid rgba(200,165,75,.1);border-radius:13px;padding:12px 8px 9px;cursor:pointer;transition:border-color .18s,background .18s,transform .12s,box-shadow .18s;display:flex;flex-direction:column;align-items:center;overflow:hidden;position:relative}
+.font-tile::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(200,165,75,.12),transparent)}
+.font-tile:hover{border-color:rgba(200,165,75,.38);background:rgba(200,165,75,.07)}
+.font-tile:active{transform:scale(.97)}
+.font-tile.active{border-color:var(--accent);background:rgba(200,165,75,.1);box-shadow:0 0 18px rgba(200,165,75,.12),inset 0 1px 0 rgba(200,165,75,.15)}
+.font-live{height:56px;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0 6px}
+.font-live-text{font-size:clamp(13px,1.7vw,19px);color:var(--text);white-space:normal;overflow:hidden;line-height:1.3;max-height:50px;direction:rtl;text-align:center;max-width:100%;word-break:break-word;transition:color .2s}
+.font-tile.active .font-live-text{color:#fff}
+.font-divider{width:70%;height:1px;background:rgba(200,165,75,.1);margin:6px 0 5px}
+.font-name{display:block;font-size:10px;font-weight:700;color:var(--accent)}
+.font-style-label{display:block;font-size:8px;color:var(--sub);margin-top:1px}
+
+/* font trigger — opens the picker modal */
+.font-select{width:100%;display:flex;align-items:center;gap:12px;background:rgba(18,14,22,.85);border:1.5px solid var(--border2);border-radius:14px;padding:11px 14px;cursor:pointer;text-align:right;font-family:'Cairo',sans-serif;transition:border-color .18s,background .18s,transform .12s,box-shadow .18s}
+.font-select:hover{border-color:rgba(200,165,75,.55);background:rgba(200,165,75,.06);box-shadow:0 0 18px rgba(200,165,75,.08)}
+.font-select:active{transform:scale(.99)}
+.font-select-meta{display:flex;flex-direction:column;gap:2px;align-items:flex-start;border-left:1px solid var(--border);padding-left:12px;min-width:78px}
+.font-select-name{font-size:13px;font-weight:700;color:var(--accent)}
+.font-select-style{font-size:9px;color:var(--sub)}
+.font-select-preview{flex:1;min-width:0;font-family:'Amiri',serif;font-size:clamp(20px,5.5vw,26px);color:var(--text);direction:rtl;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25}
+.font-select-chev{display:flex;color:var(--accent);opacity:.65;transition:opacity .18s,transform .2s}
+.font-select:hover .font-select-chev{opacity:1;transform:translateY(1px)}
+
+/* ── Font picker modal ── */
+.modal-overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(5,4,9,.72);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);opacity:0;visibility:hidden;transition:opacity .28s,visibility .28s}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal{width:100%;max-width:680px;max-height:86vh;display:flex;flex-direction:column;background:linear-gradient(160deg,#16121B,#0B090F);border:1px solid var(--border2);border-radius:22px;box-shadow:0 32px 80px rgba(0,0,0,.62),inset 0 1px 0 rgba(200,165,75,.12);overflow:hidden;transform:translateY(18px) scale(.97);opacity:0;transition:transform .34s cubic-bezier(.2,.85,.25,1),opacity .26s}
+.modal-overlay.open .modal{transform:none;opacity:1}
+.modal-grip{display:none}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;padding:18px 20px 4px}
+.modal-title{font-family:'Amiri',serif;font-size:23px;font-weight:700;color:var(--accent);line-height:1.1}
+.modal-title small{display:block;font-family:'Cairo',sans-serif;font-size:10.5px;font-weight:400;color:var(--sub);letter-spacing:.3px;margin-top:3px}
+.modal-close{flex-shrink:0;width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:rgba(200,165,75,.05);color:var(--sub);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s,color .18s,border-color .18s}
+.modal-close:hover{background:rgba(200,165,75,.14);color:var(--accent);border-color:var(--border2)}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 20px 22px;overflow-y:auto;overscroll-behavior:contain}
+@media(min-width:560px){.modal-grid{grid-template-columns:repeat(3,1fr)}}
+.modal-grid::-webkit-scrollbar{width:8px}
+.modal-grid::-webkit-scrollbar-thumb{background:rgba(200,165,75,.22);border-radius:8px}
+@media(max-width:559px){
+  .modal-overlay{padding:0;align-items:flex-end}
+  .modal{max-width:none;max-height:90vh;border-radius:22px 22px 0 0;transform:translateY(100%)}
+  .modal-overlay.open .modal{transform:none}
+  .modal-grip{display:block;width:38px;height:4px;border-radius:3px;background:rgba(200,165,75,.28);margin:9px auto 0}
+}
+
+/* bg swatches */
+.bg-grid{display:flex;flex-wrap:wrap;gap:7px}
+.bg-sw{flex:1;min-width:58px;height:40px;border-radius:9px;border:2px solid transparent;cursor:pointer;overflow:hidden;position:relative;transition:border-color .18s,transform .14s,box-shadow .18s}
+.bg-sw:hover{transform:scale(1.06)}
+.bg-sw.active{border-color:var(--accent);box-shadow:0 0 14px rgba(200,165,75,.35)}
+.bg-sw-name{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.85);letter-spacing:.2px}
+
+/* speed segment */
+.seg{display:flex;gap:6px}
+.seg-btn{flex:1;background:rgba(18,14,22,.85);border:1.5px solid rgba(200,165,75,.1);border-radius:10px;padding:9px 6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;font-weight:700;color:var(--sub);transition:border-color .18s,background .18s,color .18s,transform .12s;text-align:center}
+.seg-btn:hover{border-color:rgba(200,165,75,.38);background:rgba(200,165,75,.07);color:var(--text)}
+.seg-btn:active{transform:scale(.96)}
+.seg-btn.active{border-color:var(--accent);background:rgba(200,165,75,.1);color:#fff;box-shadow:inset 0 1px 0 rgba(200,165,75,.15)}
+
+/* generate */
+.btn-gen{background:linear-gradient(135deg,#C8A84B,#A07820);color:#07060A;border:none;padding:14px 20px;border-radius:13px;font-family:'Cairo',sans-serif;font-size:clamp(15px,2vw,17px);font-weight:900;cursor:pointer;transition:transform .12s,box-shadow .18s,opacity .18s;box-shadow:0 6px 24px rgba(200,165,75,.28);display:flex;align-items:center;justify-content:center;gap:9px;width:100%;letter-spacing:.4px}
+.btn-gen:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(200,165,75,.42)}
+.btn-gen:active{transform:scale(.98)}
+.btn-gen.busy{opacity:.6;pointer-events:none}
+.btn-gen.done{background:linear-gradient(135deg,#3DAA68,#1A7840)}
+
+/* ── Preview ── */
+.preview-col{display:flex;flex-direction:column;gap:12px;min-width:0}
+@media(min-width:760px){.preview-col{position:sticky;top:20px}}
+.canvas-wrap{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:14px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:220px}
+#outputCanvas{display:block;max-width:100%;max-height:55vh;width:auto;height:auto;border-radius:10px}
+@media(max-width:640px){#outputCanvas{max-height:45vh}}
+@media(min-width:1440px){#outputCanvas{max-height:62vh}}
+.canvas-ph{position:absolute;inset:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-radius:10px;transition:opacity .4s,transform .4s;pointer-events:none;text-align:center}
+.canvas-ph.gone{opacity:0;transform:scale(.95)}
+.ph-text{font-size:12px;color:var(--sub);font-family:'Amiri',serif;font-style:italic;line-height:1.8}
+.actions{display:flex;gap:9px}
+.btn-dl{flex:1;background:rgba(200,165,75,.07);border:1px solid var(--border2);color:var(--accent);padding:12px 16px;border-radius:12px;font-family:'Cairo',sans-serif;font-size:clamp(12px,1.5vw,14px);font-weight:700;cursor:pointer;transition:background .18s,border-color .18s,transform .12s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-dl:hover:not(:disabled){background:rgba(200,165,75,.15);border-color:var(--accent)}
+.btn-dl:active:not(:disabled){transform:scale(.97)}
+.btn-dl:disabled{opacity:.28;cursor:not-allowed}
+.btn-regen{background:rgba(200,165,75,.05);border:1px solid var(--border);color:var(--sub);padding:12px 14px;border-radius:12px;cursor:pointer;transition:background .18s,color .18s,border-color .18s;display:flex;align-items:center;justify-content:center}
+.btn-regen:hover:not(:disabled){background:rgba(200,165,75,.12);color:var(--accent);border-color:var(--border2)}
+.btn-regen:disabled{opacity:.28;cursor:not-allowed}
+
+@keyframes shake{0%,100%{transform:translateX(0)}25%,75%{transform:translateX(-7px)}50%{transform:translateX(7px)}}
+.shake{animation:shake .35s ease}
+.site-footer{display:flex;align-items:center;justify-content:center;gap:16px;padding-top:36px}
+.site-footer span.ft-txt{font-family:'Amiri',serif;font-size:clamp(14px,1.8vw,19px);font-weight:700;color:var(--accent);letter-spacing:.5px;white-space:nowrap;text-shadow:0 0 18px rgba(200,165,75,.25)}
+.site-footer .ft-line{flex:1;max-width:130px;height:1px;background:linear-gradient(to left,transparent,rgba(200,165,75,.55),transparent)}
+@media(max-width:600px){.site-footer span.ft-txt{white-space:normal;text-align:center}.site-footer .ft-line{max-width:40px}}
+</style>
+</head>
+<body>
+<canvas id="bgC"></canvas>
+<div class="page">
+  <header class="hdr">
+    <div class="hdr-tools">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8A84B" stroke-width="1.3" stroke-linecap="round"><path d="M20 3s-4 1-8 5S4 20 4 20"/><path d="M4 20c3-1 6-2 8-4"/><path d="M12 12l2 2"/></svg>
+      <svg width="12" height="18" viewBox="0 0 12 24" fill="none" stroke="#C8A84B" stroke-width="1.2" opacity=".45" stroke-linecap="round"><ellipse cx="6" cy="21" rx="3.5" ry="2.2"/><path d="M2.5 21V9C2.5 5.5 4 3 6 3s3.5 2.5 3.5 6v12"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8A84B" stroke-width="1.3" stroke-linecap="round" style="transform:scaleX(-1)"><path d="M20 3s-4 1-8 5S4 20 4 20"/><path d="M4 20c3-1 6-2 8-4"/><path d="M12 12l2 2"/></svg>
+    </div>
+    <div class="hdr-row"><div class="hdr-line"></div><h1>نقش الاسم</h1><div class="hdr-line"></div></div>
+  </header>
+
+  <div class="main-grid">
+    <div class="controls">
+      <div>
+        <div class="ctrl-label">اكتب الاسم أو العبارة</div>
+        <div class="name-wrap"><input id="nameInput" type="text" placeholder="لا إله إلا الله" maxlength="70" autocomplete="off" spellcheck="false"><span class="name-icon">✒</span></div>
+      </div>
+      <div>
+        <div class="ctrl-label">مقاس الصورة</div>
+        <div class="fmt-grid" id="fmtGrid"></div>
+      </div>
+      <div>
+        <div class="ctrl-label">الخط</div>
+        <button class="font-select" id="fontSelect" type="button" aria-haspopup="dialog">
+          <span class="font-select-preview" id="fontSelPreview">نقش</span>
+          <span class="font-select-meta">
+            <span class="font-select-name" id="fontSelName">أميري</span>
+            <span class="font-select-style" id="fontSelStyle">النسخ الكلاسيكي</span>
+          </span>
+          <span class="font-select-chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+      </div>
+      <div>
+        <div class="ctrl-label">الخلفية</div>
+        <div class="bg-grid" id="bgGrid"></div>
+      </div>
+      <div>
+        <div class="ctrl-label">سرعة التكوين</div>
+        <div class="seg" id="speedSeg">
+          <button class="seg-btn" data-sp="1.7">بطيء</button>
+          <button class="seg-btn active" data-sp="1">متوسط</button>
+          <button class="seg-btn" data-sp="0.5">سريع</button>
+        </div>
+      </div>
+      <button class="btn-gen" id="btnGen">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        توليد الخط
+      </button>
+    </div>
+
+    <div class="preview-col">
+      <div class="canvas-wrap">
+        <canvas id="outputCanvas"></canvas>
+        <div class="canvas-ph" id="canvasPh">
+          <div style="opacity:.28"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C8A84B" stroke-width=".9"><path d="M20 3s-4 1-8 5S4 20 4 20"/><path d="M4 20c3-1 6-2 8-4"/></svg></div>
+          <div class="ph-text">اختر الخط والخلفية<br>ثم اضغط توليد لتشكيل الحروف</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn-dl" id="btnDl" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          تحميل PNG
+        </button>
+        <button class="btn-regen" id="btnRegen" title="إعادة التوليد" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer"><span class="ft-line"></span><span class="ft-txt">الخط العربي — إرث الحضارة وجمال اللغة</span><span class="ft-line"></span></footer>
+</div>
+
+<div class="modal-overlay" id="fontModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="اختر الخط">
+    <div class="modal-grip"></div>
+    <div class="modal-head">
+      <div class="modal-title">اختر الخط<small>معاينة حية لاسمك بكل خط — اضغط للاختيار</small></div>
+      <button class="modal-close" id="fontModalClose" aria-label="إغلاق"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="font-grid modal-grid" id="fontGrid"></div>
+  </div>
+</div>
+
+<script>
+// ================================================================
+// DATA
+// ================================================================
+const FORMATS = [
+  {id:'profile', name:'بروفايل',  sub:'1080×1080', w:1080, h:1080, sw:20, sh:20,
+   d1Y:.30, nY:.52, d2Y:.72, fY:.89},
+  {id:'story',   name:'قصة/ريلز', sub:'1080×1920', w:1080, h:1920, sw:12, sh:22,
+   d1Y:.26, nY:.49, d2Y:.68, fY:.83},
+  {id:'post',    name:'تغريدة',   sub:'1200×630',  w:1200, h:630,  sw:28, sh:17,
+   d1Y:.32, nY:.54, d2Y:.74, fY:.91},
+];
+
+const FONTS = [
+  {id:'amiri',   name:'أميري',    style:'النسخ الكلاسيكي',  family:"'Amiri', serif",           weight:'700', sizeM:1.0},
+  {id:'scheher', name:'شهرزاد',  style:'النسخ التقليدي',   family:"'Scheherazade New', serif", weight:'700', sizeM:1.05},
+  {id:'kufi',    name:'كوفي',     style:'الخط الكوفي',      family:"'Reem Kufi', sans-serif",   weight:'700', sizeM:.9},
+  {id:'ruqaa',   name:'الرقعة',  style:'خط الرقعة',        family:"'Aref Ruqaa', serif",       weight:'700', sizeM:1.0},
+  {id:'lateef',  name:'لطيف',    style:'الخط اللطيف',      family:"'Lateef', serif",           weight:'400', sizeM:1.15},
+  {id:'rakkas',  name:'رقاص',    style:'خط زخرفي جريء',   family:"'Rakkas', cursive",         weight:'400', sizeM:1.0},
+  {id:'gulzar',  name:'نستعليق',  style:'الخط الفارسي',     family:"'Gulzar', serif",           weight:'400', sizeM:.92},
+  {id:'messiri', name:'المسيري',  style:'حديث أنيق',        family:"'El Messiri', sans-serif",  weight:'700', sizeM:1.0},
+  {id:'lalezar', name:'لاله‌زار',  style:'زخرفي مدوّر',       family:"'Lalezar', cursive",        weight:'400', sizeM:1.0},
+  {id:'mirza',   name:'ميرزا',    style:'نسخ منمّق',        family:"'Mirza', serif",            weight:'700', sizeM:1.05},
+  {id:'jomhuria',name:'جمهورية',  style:'عريض ضخم',         family:"'Jomhuria', serif",         weight:'400', sizeM:.78},
+];
+
+// Refined manuscript palettes — calm, classic, gold-on-dark / ink-on-cream
+const BGS = [
+  {
+    id:'dark', name:'مخطوطة',
+    bg0:'#171436', bg1:'#0C0A24', bg2:'#050410',
+    hiColor:'rgba(120,95,210,0.10)', hiX:.5, hiY:.40, hiR:.6,
+    text:'#EFDCA4', accent:'#CDAB54', glow:true, ink:'rgba(205,171,84,', latA:.052,
+    css:'linear-gradient(150deg,#181537,#0C0A24 55%,#050410)'
+  },
+  {
+    id:'parchment', name:'رق أثري',
+    bg0:'#F3E8C6', bg1:'#E2CF98', bg2:'#C7A862',
+    hiColor:'rgba(255,250,225,0.40)', hiX:.42, hiY:.33, hiR:.55,
+    text:'#2A1606', accent:'#7C4318', glow:false, ink:'rgba(70,40,12,', latA:.05,
+    css:'linear-gradient(150deg,#F1E5BE,#DCC78C 55%,#C2A157)'
+  },
+  {
+    id:'sultan', name:'سلطانية',
+    bg0:'#3A0E10', bg1:'#240608', bg2:'#0E0203',
+    hiColor:'rgba(215,90,50,0.12)', hiX:.5, hiY:.38, hiR:.58,
+    text:'#F3DD8C', accent:'#D6A23E', glow:true, ink:'rgba(214,162,62,', latA:.05,
+    css:'linear-gradient(150deg,#3C0F11,#250709 55%,#0E0203)'
+  },
+  {
+    id:'emerald', name:'زمردية',
+    bg0:'#0C2A1B', bg1:'#06180F', bg2:'#020A06',
+    hiColor:'rgba(70,180,120,0.10)', hiX:.5, hiY:.38, hiR:.58,
+    text:'#EEE0AC', accent:'#C9A84A', glow:true, ink:'rgba(201,168,74,', latA:.05,
+    css:'linear-gradient(150deg,#0D2C1C,#06180F 55%,#020A06)'
+  },
+  {
+    id:'ivory', name:'عاجية',
+    bg0:'#FAF5EA', bg1:'#EFE6D2', bg2:'#DECFB2',
+    hiColor:'rgba(255,255,255,0.50)', hiX:.42, hiY:.32, hiR:.5,
+    text:'#1B2444', accent:'#9A7A2E', glow:false, ink:'rgba(60,55,90,', latA:.045,
+    css:'linear-gradient(150deg,#FAF5EA,#EEE4CF 55%,#DBCBAC)'
+  },
+  {
+    id:'copper', name:'نُحاسية',
+    bg0:'#43260F', bg1:'#2A1607', bg2:'#0F0702',
+    hiColor:'rgba(230,150,70,0.13)', hiX:.5, hiY:.38, hiR:.58,
+    text:'#F4D9A6', accent:'#D08A3A', glow:true, ink:'rgba(208,138,58,', latA:.05,
+    css:'linear-gradient(150deg,#46280F,#2B1707 55%,#0F0702)'
+  },
+  {
+    id:'charcoal', name:'فحمية',
+    bg0:'#262A33', bg1:'#161920', bg2:'#080A0E',
+    hiColor:'rgba(190,170,110,0.09)', hiX:.5, hiY:.38, hiR:.6,
+    text:'#ECE4CC', accent:'#C2A968', glow:true, ink:'rgba(194,169,104,', latA:.05,
+    css:'linear-gradient(150deg,#272B34,#161920 55%,#080A0E)'
+  },
+  {
+    id:'rose', name:'وردية',
+    bg0:'#FBEEE8', bg1:'#F1D8CD', bg2:'#E0B9AB',
+    hiColor:'rgba(255,250,245,0.45)', hiX:.42, hiY:.32, hiR:.5,
+    text:'#52232E', accent:'#A65648', glow:false, ink:'rgba(120,60,55,', latA:.045,
+    css:'linear-gradient(150deg,#FBEEE8,#F0D6CB 55%,#DDB3A4)'
+  },
+  {
+    id:'sunset', name:'غروب',
+    bg0:'#6E2C1A', bg1:'#3A1208', bg2:'#150402',
+    hiColor:'rgba(245,150,60,0.16)', hiX:.5, hiY:.40, hiR:.6,
+    text:'#FCE3AA', accent:'#EE9433', glow:true, ink:'rgba(238,148,51,', latA:.05,
+    css:'linear-gradient(150deg,#71301C,#3B1308 55%,#150402)'
+  },
+  {
+    id:'turquoise', name:'فيروزية',
+    bg0:'#073431', bg1:'#04211F', bg2:'#020C0C',
+    hiColor:'rgba(60,200,175,0.11)', hiX:.5, hiY:.38, hiR:.58,
+    text:'#D2F2E8', accent:'#33C2A6', glow:true, ink:'rgba(51,194,166,', latA:.05,
+    css:'linear-gradient(150deg,#083633,#04211F 55%,#020C0C)'
+  },
+  {
+    id:'sky', name:'سماوية',
+    bg0:'#EEF4F8', bg1:'#D8E7F0', bg2:'#BBD2E2',
+    hiColor:'rgba(255,255,255,0.50)', hiX:.42, hiY:.32, hiR:.5,
+    text:'#16314C', accent:'#3F779C', glow:false, ink:'rgba(40,75,110,', latA:.045,
+    css:'linear-gradient(150deg,#EEF4F8,#D6E5EF 55%,#B7CFE0)'
+  },
+];
+
+let selFmt  = FORMATS[0];
+let selFont = FONTS[0];
+let selBg   = BGS[0];
+let generated = false;
+let animGen = 0; // cancel token
+let animSpeed = 1; // 1.7 slow · 1 normal · 0.5 fast
+
+// ================================================================
+// BACKGROUND CANVAS
+// ================================================================
+const bgC   = document.getElementById('bgC');
+const bgCtx = bgC.getContext('2d');
+const LETTERS = 'ابتثجحخدذرزسشصضطظعغفقكلمنهويءآأإةؤئ'.split('');
+const WORDS   = ['قلم','حبر','خط','نور','سطر','نقش','علم','ورق','كتب','دُر'];
+const BG_F    = ["'Amiri',serif","'Reem Kufi',sans-serif","'Aref Ruqaa',serif","'Scheherazade New',serif","'Rakkas',cursive","'Lateef',serif"];
+
+function inkBlob(ctx,cx,cy,r,c,a){
+  ctx.save();ctx.globalAlpha=a;ctx.fillStyle=c+'1)';ctx.beginPath();
+  for(let i=0;i<=10;i++){const ang=i/10*Math.PI*2,rad=r*(.5+Math.random()*.95);
+    i?ctx.lineTo(cx+rad*Math.cos(ang),cy+rad*Math.sin(ang)):ctx.moveTo(cx+rad*Math.cos(ang),cy+rad*Math.sin(ang))}
+  ctx.closePath();ctx.fill();ctx.restore();
+}
+
+function drawBg(){
+  const W=bgC.width=window.innerWidth, H=bgC.height=window.innerHeight;
+  const g=bgCtx.createRadialGradient(W*.48,H*.42,0,W*.5,H*.5,W*.9);
+  g.addColorStop(0,'#0D0A14');g.addColorStop(1,'#07060A');
+  bgCtx.fillStyle=g;bgCtx.fillRect(0,0,W,H);
+  const n=Math.floor(W*H/9000);
+  for(let i=0;i<n;i++){
+    const ch=Math.random()>.18?LETTERS[~~(Math.random()*LETTERS.length)]:WORDS[~~(Math.random()*WORDS.length)];
+    const f=BG_F[~~(Math.random()*BG_F.length)];
+    const sz=24+Math.random()*100, x=Math.random()*W, y=Math.random()*H;
+    const ang=(Math.random()-.5)*.7, al=.02+Math.random()*.07;
+    bgCtx.save();bgCtx.translate(x,y);bgCtx.rotate(ang);
+    bgCtx.font=`${sz}px ${f}`;
+    bgCtx.fillStyle=Math.random()>.4?`rgba(200,165,75,${al})`:`rgba(230,220,200,${al*.6})`;
+    bgCtx.textAlign='center';bgCtx.textBaseline='middle';bgCtx.fillText(ch,0,0);bgCtx.restore();
+  }
+  [[.04,.06,40],[.96,.08,32],[.04,.93,36],[.96,.92,44],[.5,.02,24]].forEach(([x,y,r])=>
+    inkBlob(bgCtx,x*W,y*H,r,'rgba(200,165,75,',.07+Math.random()*.09));
+  const vt=bgCtx.createLinearGradient(0,0,0,H*.22);vt.addColorStop(0,'rgba(7,6,10,.88)');vt.addColorStop(1,'transparent');
+  bgCtx.fillStyle=vt;bgCtx.fillRect(0,0,W,H*.22);
+  const vb=bgCtx.createLinearGradient(0,H*.78,0,H);vb.addColorStop(0,'transparent');vb.addColorStop(1,'rgba(7,6,10,.88)');
+  bgCtx.fillStyle=vb;bgCtx.fillRect(0,H*.78,W,H*.22);
+}
+
+// ================================================================
+// UI BUILDER
+// ================================================================
+function getCurrentName(){ return document.getElementById('nameInput').value.trim()||'نقش' }
+
+function buildFmtGrid(){
+  const el=document.getElementById('fmtGrid');el.innerHTML='';
+  FORMATS.forEach(f=>{
+    const t=document.createElement('div');
+    t.className='fmt-tile'+(f===selFmt?' active':'');
+    t.innerHTML=`<div class="fmt-shape" style="width:${f.sw}px;height:${f.sh}px"></div><span class="fmt-name">${f.name}</span><span class="fmt-sub">${f.sub}</span>`;
+    t.addEventListener('click',()=>{
+      selFmt=f;document.querySelectorAll('.fmt-tile').forEach(x=>x.classList.remove('active'));t.classList.add('active');
+      applyFormat();if(generated)scheduleRender();
+    });
+    el.appendChild(t);
+  });
+}
+
+function buildFontGrid(){
+  const el=document.getElementById('fontGrid');el.innerHTML='';
+  const name=getCurrentName();
+  FONTS.forEach(f=>{
+    const t=document.createElement('div');
+    t.className='font-tile'+(f===selFont?' active':'');
+    t.innerHTML=`<div class="font-live"><span class="font-live-text" style="font-family:${f.family};font-weight:${f.weight}">${name}</span></div><div class="font-divider"></div><span class="font-name">${f.name}</span><span class="font-style-label">${f.style}</span>`;
+    t.addEventListener('click',()=>{
+      selFont=f;document.querySelectorAll('.font-tile').forEach(x=>x.classList.remove('active'));t.classList.add('active');
+      updateFontTrigger();
+      closeFontModal();
+      if(generated)scheduleRender();
+    });
+    el.appendChild(t);
+  });
+}
+
+function updateFontTrigger(){
+  const p=document.getElementById('fontSelPreview');
+  p.style.fontFamily=selFont.family;p.style.fontWeight=selFont.weight;p.textContent=getCurrentName();
+  document.getElementById('fontSelName').textContent=selFont.name;
+  document.getElementById('fontSelStyle').textContent=selFont.style;
+}
+
+// ── Modal open / close ──
+function openFontModal(){
+  const m=document.getElementById('fontModal');
+  m.classList.add('open');m.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  const active=m.querySelector('.font-tile.active');
+  if(active)active.scrollIntoView({block:'nearest'});
+}
+function closeFontModal(){
+  const m=document.getElementById('fontModal');
+  m.classList.remove('open');m.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+}
+
+function buildBgGrid(){
+  const el=document.getElementById('bgGrid');el.innerHTML='';
+  BGS.forEach(b=>{
+    const s=document.createElement('div');
+    s.className='bg-sw'+(b===selBg?' active':'');
+    s.style.background=b.css;
+    s.innerHTML=`<span class="bg-sw-name" style="color:${b.text}">${b.name}</span>`;
+    s.addEventListener('click',()=>{
+      selBg=b;document.querySelectorAll('.bg-sw').forEach(x=>x.classList.remove('active'));s.classList.add('active');
+      if(generated)scheduleRender();
+    });
+    el.appendChild(s);
+  });
+}
+
+function updateLivePreviews(){
+  const name=getCurrentName();
+  document.querySelectorAll('.font-live-text').forEach(el=>el.textContent=name);
+  document.getElementById('fontSelPreview').textContent=name;
+}
+
+// ================================================================
+// CANVAS SETUP
+// ================================================================
+const outCanvas=document.getElementById('outputCanvas');
+const outCtx=outCanvas.getContext('2d');
+
+function applyFormat(){
+  outCanvas.width=selFmt.w;outCanvas.height=selFmt.h;
+}
+
+// ================================================================
+// DRAWING HELPERS
+// ================================================================
+function drawBgLayer(ctx,W,H,bg){
+  // Smooth diagonal base — layered linear over radial for depth without muddiness
+  const lin=ctx.createLinearGradient(0,0,W*.7,H);
+  lin.addColorStop(0,bg.bg0);lin.addColorStop(.55,bg.bg1);lin.addColorStop(1,bg.bg2);
+  ctx.fillStyle=lin;ctx.fillRect(0,0,W,H);
+
+  // Soft off-center glow pool
+  if(bg.hiColor){
+    const h2=ctx.createRadialGradient(W*bg.hiX,H*bg.hiY,0,W*bg.hiX,H*bg.hiY,W*bg.hiR);
+    h2.addColorStop(0,bg.hiColor);h2.addColorStop(1,'transparent');
+    ctx.fillStyle=h2;ctx.fillRect(0,0,W,H);
+  }
+}
+
+// Calm, evenly-distributed letter watermark — staggered lattice, uniform tone
+function drawLatticeLetters(ctx,W,H,bg){
+  const step=Math.max(76,W/8.5), fs=step*.6;
+  ctx.save();
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.font=`${fs}px 'Aref Ruqaa', serif`;
+  ctx.fillStyle=bg.ink+bg.latA+')';
+  let row=0;
+  for(let y=step*.25;y<H+step*.5;y+=step*.96){
+    const off=(row%2)?step/2:0;
+    let col=0;
+    for(let x=off-step*.4;x<W+step;x+=step){
+      const ch=LETTERS[(row*5+col*3)%LETTERS.length];
+      ctx.save();ctx.translate(x,y);ctx.rotate(-0.06);
+      ctx.fillText(ch,0,0);ctx.restore();
+      col++;
+    }
+    row++;
+  }
+  ctx.restore();
+}
+
+// Faint geometric medallion behind the name — illuminated-manuscript feel
+function drawMedallion(ctx,W,H,bg){
+  const cx=W/2, cy=H*0.5, R=Math.min(W,H)*.42;
+  ctx.save();ctx.translate(cx,cy);
+  ctx.strokeStyle=bg.accent;ctx.lineWidth=Math.max(1,W*.0015);
+  // concentric rings
+  [R,R*.74,R*.46].forEach(r=>{ctx.globalAlpha=.05;ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.stroke();});
+  // radiating spokes
+  ctx.globalAlpha=.035;
+  for(let i=0;i<24;i++){const a=i/24*Math.PI*2;ctx.beginPath();ctx.moveTo(Math.cos(a)*R*.46,Math.sin(a)*R*.46);ctx.lineTo(Math.cos(a)*R,Math.sin(a)*R);ctx.stroke();}
+  // petal rosette
+  ctx.globalAlpha=.04;
+  for(let i=0;i<12;i++){const a=i/12*Math.PI*2;ctx.beginPath();ctx.arc(Math.cos(a)*R*.58,Math.sin(a)*R*.58,R*.32,0,Math.PI*2);ctx.stroke();}
+  // inner 8-point star
+  ctx.globalAlpha=.05;ctx.beginPath();
+  for(let i=0;i<16;i++){const a=i/16*Math.PI*2-Math.PI/2,rr=(i%2?R*.18:R*.42);
+    i?ctx.lineTo(Math.cos(a)*rr,Math.sin(a)*rr):ctx.moveTo(Math.cos(a)*rr,Math.sin(a)*rr);}
+  ctx.closePath();ctx.stroke();
+  ctx.restore();
+}
+
+// Unifying grain + edge vignette
+function drawFinish(ctx,W,H,bg){
+  const gc=document.createElement('canvas');gc.width=gc.height=140;
+  const gx=gc.getContext('2d'),id=gx.createImageData(140,140);
+  for(let i=0;i<id.data.length;i+=4){const n=Math.random()*255;id.data[i]=id.data[i+1]=id.data[i+2]=n;id.data[i+3]=Math.random()*24}
+  gx.putImageData(id,0,0);
+  ctx.save();ctx.globalAlpha=bg.glow?.025:.04;ctx.fillStyle=ctx.createPattern(gc,'repeat');ctx.fillRect(0,0,W,H);ctx.restore();
+  const v=ctx.createRadialGradient(W/2,H*.46,H*.1,W/2,H/2,Math.max(W,H)*.7);
+  v.addColorStop(0,'transparent');v.addColorStop(1,bg.glow?'rgba(0,0,0,.42)':'rgba(40,26,8,.20)');
+  ctx.fillStyle=v;ctx.fillRect(0,0,W,H);
+}
+
+function star8(ctx,cx,cy,r,color,a=1){
+  ctx.save();ctx.translate(cx,cy);ctx.fillStyle=color;ctx.globalAlpha=a;ctx.beginPath();
+  for(let i=0;i<8;i++){const a0=i/8*Math.PI*2-Math.PI/2,a1=a0+Math.PI/8;
+    i?ctx.lineTo(r*Math.cos(a0),r*Math.sin(a0)):ctx.moveTo(r*Math.cos(a0),r*Math.sin(a0));
+    ctx.lineTo(r*.42*Math.cos(a1),r*.42*Math.sin(a1));}
+  ctx.closePath();ctx.fill();ctx.restore();
+}
+function diamond(ctx,cx,cy,r,color,a=.7){
+  ctx.save();ctx.fillStyle=color;ctx.globalAlpha=a;ctx.beginPath();
+  ctx.moveTo(cx,cy-r);ctx.lineTo(cx+r,cy);ctx.lineTo(cx,cy+r);ctx.lineTo(cx-r,cy);
+  ctx.closePath();ctx.fill();ctx.restore();
+}
+
+function drawBorder(ctx,W,H,bg){
+  const u=Math.min(W,H),m=~~(u*.022),m2=~~(u*.034),sr=Math.max(8,~~(u*.012)),dr=Math.max(3,~~(sr*.36));
+  ctx.save();ctx.strokeStyle=bg.accent;ctx.lineWidth=Math.max(3,W*.0038);ctx.globalAlpha=.9;
+  ctx.strokeRect(m,m,W-m*2,H-m*2);
+  ctx.lineWidth=Math.max(1,W*.0012);ctx.globalAlpha=.28;ctx.strokeRect(m2,m2,W-m2*2,H-m2*2);ctx.restore();
+  [[m,m],[W-m,m],[m,H-m],[W-m,H-m]].forEach(([x,y])=>star8(ctx,x,y,sr,bg.accent,.9));
+  [[m2,m2],[W-m2,m2],[m2,H-m2],[W-m2,H-m2]].forEach(([x,y])=>diamond(ctx,x,y,~~(sr*.38),bg.accent,.4));
+  for(let i=1;i<9;i++){const x=m+(W-m*2)*i/9;diamond(ctx,x,m,dr,bg.accent,.5);diamond(ctx,x,H-m,dr,bg.accent,.5)}
+  for(let i=1;i<6;i++){const y=m+(H-m*2)*i/6;diamond(ctx,m,y,dr,bg.accent,.36);diamond(ctx,W-m,y,dr,bg.accent,.36)}
+}
+
+function drawDivider(ctx,W,H,y,bg){
+  const pad=W*.14,mx=W/2,sr=Math.max(7,W*.0085),dr=Math.max(2.5,W*.003);
+  ctx.save();ctx.strokeStyle=bg.accent;ctx.lineWidth=Math.max(1,W*.0012);ctx.globalAlpha=.48;
+  ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(mx-sr*3.5,y);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(mx+sr*3.5,y);ctx.lineTo(W-pad,y);ctx.stroke();ctx.restore();
+  star8(ctx,mx,y,sr,bg.accent,.92);
+  ctx.save();ctx.fillStyle=bg.accent;ctx.globalAlpha=.55;
+  [mx-sr*2.4,mx+sr*2.4].forEach(x=>{ctx.beginPath();ctx.arc(x,y,dr,0,Math.PI*2);ctx.fill()});ctx.restore();
+}
+
+function drawFooterText(ctx,W,H,fmt,bg){
+  ctx.save();ctx.direction='rtl';ctx.font=`400 ${Math.max(11,W*.012)}px 'Cairo',sans-serif`;
+  ctx.fillStyle=bg.text;ctx.textAlign='center';ctx.globalAlpha=.18;
+  ctx.fillText('✦  نقش الاسم  ✦',W/2,H*fmt.fY);ctx.restore();
+}
+
+// ================================================================
+// TEXT WRAPPING + NAME DRAWING
+// ================================================================
+function wrapText(ctx,text,maxW){
+  if(ctx.measureText(text).width<=maxW) return [text];
+  const words=text.split(/\s+/).filter(Boolean);
+  if(words.length<2) return [text];
+  const lines=[];let cur='';
+  for(const w of words){
+    const trial=cur?cur+' '+w:w;
+    if(ctx.measureText(trial).width<=maxW){cur=trial}
+    else{if(cur)lines.push(cur);cur=w}
+  }
+  if(cur)lines.push(cur);
+  return lines.length?lines:[text];
+}
+
+function calcNameLayout(W,H,fmt,name,font){
+  const isAr=/[؀-ۿ]/.test(name);
+  const maxW=W*.76, maxTH=H*.38;
+  const tmp=document.createElement('canvas').getContext('2d');
+  tmp.direction=isAr?'rtl':'ltr';
+  let fs=Math.min(190,H*.23*font.sizeM),lines=[name];
+  while(fs>12){
+    tmp.font=`${font.weight} ${fs}px ${font.family}`;
+    lines=wrapText(tmp,name,maxW);
+    if(lines.length*fs*1.48<maxTH) break;
+    fs-=2;
+  }
+  tmp.font=`${font.weight} ${fs}px ${font.family}`;
+  const maxLineW=Math.max(...lines.map(l=>tmp.measureText(l).width));
+  const lh=fs*1.48, totalH=lines.length*lh;
+  const baseY=H*fmt.nY - totalH/2 + lh*.78;
+  return {fs,lines,lh,totalH,baseY,maxLineW,isAr};
+}
+
+function drawName(ctx,W,H,fmt,name,font,bg){
+  const {fs,lines,lh,baseY,isAr}=calcNameLayout(W,H,fmt,name,font);
+  ctx.save();ctx.direction=isAr?'rtl':'ltr';ctx.textAlign='center';ctx.textBaseline='alphabetic';
+  ctx.font=`${font.weight} ${fs}px ${font.family}`;
+  if(bg.glow){ctx.shadowColor=bg.accent;ctx.shadowBlur=W*.04}
+  ctx.fillStyle=bg.text;
+  lines.forEach((l,i)=>ctx.fillText(l,W/2,baseY+i*lh));
+  ctx.restore();
+}
+
+// ================================================================
+// STATIC LAYER RENDER (everything except name)
+// ================================================================
+function renderStatic(ctx,W,H,fmt,bg){
+  drawBgLayer(ctx,W,H,bg);
+  drawLatticeLetters(ctx,W,H,bg);
+  drawMedallion(ctx,W,H,bg);
+  drawFinish(ctx,W,H,bg);
+  drawBorder(ctx,W,H,bg);
+  drawDivider(ctx,W,H,H*fmt.d1Y,bg);
+  drawDivider(ctx,W,H,H*fmt.d2Y,bg);
+  drawFooterText(ctx,W,H,fmt,bg);
+}
+
+function renderToCtx(ctx,W,H,fmt,name,font,bg){
+  renderStatic(ctx,W,H,fmt,bg);
+  drawName(ctx,W,H,fmt,name,font,bg);
+}
+
+// ================================================================
+// ANIMATED RENDER — letter-by-letter clip sweep
+// ================================================================
+function hexA(hex,a){
+  const h=hex.replace('#','');
+  const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+async function animatedRender(){
+  const name=document.getElementById('nameInput').value.trim();
+  if(!name) return;
+
+  const W=outCanvas.width, H=outCanvas.height;
+  const fmt=selFmt, font=selFont, bg=selBg;
+  const myGen=++animGen;
+
+  setBusy(true);
+  await document.fonts.ready;
+
+  // Static layers + full name → offscreen (correct Arabic shaping baked once)
+  const staticOff=makeCanvas(W,H);
+  renderStatic(staticOff.getContext('2d'),W,H,fmt,bg);
+  const nameOff=makeCanvas(W,H);
+  drawName(nameOff.getContext('2d'),W,H,fmt,name,font,bg);
+
+  // Layout + per-character bands
+  const {fs,lines,lh,baseY,isAr}=calcNameLayout(W,H,fmt,name,font);
+  const tmp=makeCanvas(2,2).getContext('2d');
+  tmp.direction=isAr?'rtl':'ltr';
+  tmp.font=`${font.weight} ${fs}px ${font.family}`;
+
+  const nGlyph=[...name].filter(c=>c.trim()!=='').length;
+  const PER=Math.max(42,Math.min(105,1150/Math.max(1,nGlyph)))*animSpeed;  // per-letter stagger
+  const DUR=230*animSpeed;                                                 // each letter's own fade
+
+  const bands=[];           // {x0,x1,yT,yB,cx,cy,delay,glyph}
+  let order=0;
+  lines.forEach((line,li)=>{
+    const chars=[...line];
+    const lineW=tmp.measureText(line).width;
+    const left=W/2-lineW/2, right=W/2+lineW/2;
+    const yT=baseY+li*lh-fs*1.06, yB=baseY+li*lh+fs*.42;
+    let wPrev=0;
+    for(let k=0;k<chars.length;k++){
+      const wNow=tmp.measureText(chars.slice(0,k+1).join('')).width;
+      const glyph=chars[k].trim()!=='';
+      let x0,x1;
+      if(isAr){ x1=right-wPrev; x0=right-wNow; }
+      else    { x0=left+wPrev;  x1=left+wNow; }
+      bands.push({x0:Math.min(x0,x1),x1:Math.max(x0,x1),yT,yB,cx:(x0+x1)/2,cy:(yT+yB)/2,delay:order*PER,glyph});
+      if(glyph) order++;
+      wPrev=wNow;
+    }
+  });
+
+  const total=order*PER+DUR;
+
+  // Show empty frame briefly
+  outCtx.clearRect(0,0,W,H);outCtx.drawImage(staticOff,0,0);
+  await sleep(180);
+  if(myGen!==animGen){setBusy(false);return}
+
+  const start=performance.now();
+  await new Promise(resolve=>{
+    function frame(ts){
+      if(myGen!==animGen){resolve();return}
+      const el=ts-start;
+      outCtx.clearRect(0,0,W,H);
+      outCtx.drawImage(staticOff,0,0);
+
+      let nib=null;
+      for(const b of bands){
+        const lp=(el-b.delay)/DUR;
+        if(lp<=0) continue;
+        const p=Math.min(lp,1);
+        const e=1-Math.pow(1-p,3);          // ease-out
+        outCtx.save();
+        outCtx.beginPath();
+        outCtx.rect(b.x0-1.5,b.yT,(b.x1-b.x0)+3,b.yB-b.yT);
+        outCtx.clip();
+        outCtx.globalAlpha=e;
+        outCtx.drawImage(nameOff,0,0);
+        outCtx.restore();
+        if(b.glyph && p<1 && p>0) nib=b;   // currently being written
+      }
+
+      // Moving pen-nib glow
+      if(nib){
+        const r=fs*.55;
+        const gg=outCtx.createRadialGradient(nib.cx,nib.cy,0,nib.cx,nib.cy,r);
+        gg.addColorStop(0,hexA(bg.accent,.5));
+        gg.addColorStop(.5,hexA(bg.accent,.18));
+        gg.addColorStop(1,hexA(bg.accent,0));
+        outCtx.save();outCtx.globalCompositeOperation='lighter';
+        outCtx.fillStyle=gg;outCtx.beginPath();outCtx.arc(nib.cx,nib.cy,r,0,Math.PI*2);outCtx.fill();
+        outCtx.restore();
+      }
+
+      if(el<total){requestAnimationFrame(frame)}
+      else{outCtx.clearRect(0,0,W,H);outCtx.drawImage(staticOff,0,0);outCtx.drawImage(nameOff,0,0);resolve()}
+    }
+    requestAnimationFrame(frame);
+  });
+
+  if(myGen!==animGen){setBusy(false);return}
+
+  generated=true;
+  document.getElementById('canvasPh').classList.add('gone');
+  setBusy(false);
+  document.getElementById('btnDl').disabled=false;
+  document.getElementById('btnRegen').disabled=false;
+}
+
+function makeCanvas(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+
+function setBusy(busy){
+  const btn=document.getElementById('btnGen');
+  if(busy){
+    btn.classList.add('busy');
+    btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> يُكتب الخط…`;
+  } else {
+    btn.classList.remove('busy');
+    btn.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> توليد الخط`;
+  }
+}
+
+// ================================================================
+// INSTANT RE-RENDER (for auto-update on font/bg change)
+// ================================================================
+let renderTimer=null;
+function scheduleRender(){
+  clearTimeout(renderTimer);
+  renderTimer=setTimeout(()=>{
+    const name=document.getElementById('nameInput').value.trim();
+    if(!name) return;
+    document.fonts.ready.then(()=>renderToCtx(outCtx,outCanvas.width,outCanvas.height,selFmt,name,selFont,selBg));
+  },60);
+}
+
+// ================================================================
+// EVENTS
+// ================================================================
+const nameInput=document.getElementById('nameInput');
+const btnGen=document.getElementById('btnGen');
+
+nameInput.addEventListener('input',()=>{
+  updateLivePreviews();
+  if(generated) scheduleRender();
+});
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter')btnGen.click()});
+
+document.getElementById('fontSelect').addEventListener('click',openFontModal);
+document.getElementById('fontModalClose').addEventListener('click',closeFontModal);
+document.getElementById('fontModal').addEventListener('click',e=>{if(e.target.id==='fontModal')closeFontModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFontModal()});
+
+document.querySelectorAll('#speedSeg .seg-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    animSpeed=parseFloat(b.dataset.sp);
+    document.querySelectorAll('#speedSeg .seg-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+  });
+});
+
+btnGen.addEventListener('click',()=>{
+  const name=nameInput.value.trim();
+  if(!name){
+    nameInput.closest('.name-wrap').classList.add('shake');
+    setTimeout(()=>nameInput.closest('.name-wrap').classList.remove('shake'),400);
+    nameInput.focus();return;
+  }
+  animatedRender().then(()=>{
+    if(generated){
+      btnGen.classList.add('done');
+      btnGen.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg> تم`;
+      setTimeout(()=>{btnGen.classList.remove('done');setBusy(false)},1800);
+    }
+  });
+});
+
+document.getElementById('btnRegen').addEventListener('click',()=>{
+  if(generated) animatedRender();
+});
+
+document.getElementById('btnDl').addEventListener('click',()=>{
+  const name=nameInput.value.trim()||'اسم';
+  const fmt=selFmt,bg=selBg,font=selFont;
+  const dlC=makeCanvas(fmt.w,fmt.h);
+  renderToCtx(dlC.getContext('2d'),fmt.w,fmt.h,fmt,name,font,bg);
+  const a=document.createElement('a');
+  a.download=`نقش-${name}-${fmt.sub}.png`;
+  a.href=dlC.toDataURL('image/png');a.click();
+});
+
+// ================================================================
+// INIT
+// ================================================================
+let bgResizeTimer;
+window.addEventListener('resize',()=>{clearTimeout(bgResizeTimer);bgResizeTimer=setTimeout(drawBg,200)});
+
+buildFmtGrid();buildFontGrid();buildBgGrid();applyFormat();updateFontTrigger();
+document.fonts.ready.then(drawBg);
+</script>
+</body>
+</html>
